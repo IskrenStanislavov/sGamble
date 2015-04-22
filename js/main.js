@@ -1,9 +1,6 @@
-require.config({
-    baseUrl: 'js',
-});
-
 define(function(require) {
     var PIXI        = require("libs/pixi");
+    var cards       = require("cards");
     var config      = require("config");
 
     var stage = new PIXI.Stage(0x39435E);
@@ -21,15 +18,15 @@ define(function(require) {
     }
 
     var loader = new PIXI.AssetLoader([
-        "images/cards-faces-classic.png",
-        "images/cards_back.png",
+        config.faceTextures.src,
+        config.backTextures.src,
         ]);
 
-    loader.onComplete = function(){
-        var card = { x:10, y:1, w: 100, h:100};
-        var face = stage.addChild(new cards.CardFace(card.x, card.y, card.w, card.h));
+    loader.onComplete = function() {
+        var face = stage.addChild(new cards.Card("A", "clubs"));
+        face.reveal();
         face.x = 100;
-        var back = stage.addChild(new cards.CardBack());
+        var back = stage.addChild(new cards.Card("J", "spades"));
         back.x = 200;
         requestAnimFrame(animate);
 
