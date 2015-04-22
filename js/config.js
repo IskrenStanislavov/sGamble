@@ -1,6 +1,6 @@
 define(function(){
     return {
-        "shapes": [
+        "suits": [
             "clubs",//спатия
             "diamonds",//каро
             "hearts",//купа
