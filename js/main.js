@@ -3,7 +3,7 @@ define(function(require) {
     var cards       = require("cards");
     var config      = require("config");
 
-    var stage = new PIXI.Stage(0x39435E);
+    var stage = new PIXI.Stage(0xFFFFFF);
     var renderer = PIXI.autoDetectRenderer(config.canvas.width, config.canvas.height, {
         "roundPixels": true,
         "antialias": true,
@@ -18,23 +18,25 @@ define(function(require) {
     }
 
     var loader = new PIXI.AssetLoader([
-        config.faceTextures.src,
-        config.backTextures.src,
+        config.deck.faceTextures,
+        config.deck.backTextures,
         ]);
 
     loader.onComplete = function() {
-        var face = stage.addChild(new cards.Card("A", "clubs"));
-        face.reveal();
-        face.x = 100;
-        var back = stage.addChild(new cards.Card("J", "spades"));
-        back.x = 100;
-        window.face = face;
-        window.back = back;
+        // dealer.pickCard();
+        // player.pickCards();
+        var cardSuit = config.deck.suits[Math.floor(Math.random()*config.deck.suits.length)];
+        var cardId = config.deck.ids[Math.floor(Math.random()*config.deck.suits.length)];
+        var playerCard = stage.addChild(new cards.Card( cardId, cardSuit ));
+        // playerCard.reveal();
+        playerCard.x = 100;
+        window.face = playerCard;
+        window.cards = cards;
+        window.PIXI = PIXI;
+
         requestAnimFrame(animate);
     };
 
     loader.load();
-
-
 
 });

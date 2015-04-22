@@ -1,23 +1,34 @@
 define(function(){
-    return {
-        "suits": [
-            "clubs",//спатия
-            "diamonds",//каро
-            "hearts",//купа
-            "spades",//пика
-        ],
-        "faceTextures": {
-            "src" : "images/cards-faces-classic.png",
-        },
+    var cardIds = Array.apply(null, Array(13)).map(function (_, i) {
+        // http://stackoverflow.com/a/10050831/3345926
+        switch(i) {
+            case 0:
+                return "A";
+            case 10:
+                return "J";
+            case 11:
+                return "Q";
+            case 12:
+                return "K";
+            default:
+                return String(i+1);
+        }
+        throw "wtf";
+    });
 
-        "backTextures": {
-            "src" : "images/cards_back.png",
+    return {
+        "deck":{
+            // "suits": ["пика", "купа", "каро", "спатия"],
+            "suits": ["spades", "hearts", "diamonds", "clubs"],
+            "ids": cardIds.slice(1).concat("A"),
+            "faceTextures" : "images/deck.json",
+            "backTextures" : "images/back.png",
         },
 
         "canvas": {
-            "id": "game",
             "width": 800,
             "height": 600,
+            "id": "game"
         },
     }; 
 })
