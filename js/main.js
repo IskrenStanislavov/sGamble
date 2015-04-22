@@ -23,14 +23,15 @@ define(function(require) {
         ]);
 
     loader.onComplete = function() {
-        // dealer.pickCard();
+        // var player = stage.addChild(new Player());
         // player.pickCards();
-        var cardSuit = config.deck.suits[Math.floor(Math.random()*config.deck.suits.length)];
-        var cardId = config.deck.ids[Math.floor(Math.random()*config.deck.suits.length)];
-        var playerCard = stage.addChild(new cards.Card( cardId, cardSuit ));
-        // playerCard.reveal();
-        playerCard.x = 100;
-        window.face = playerCard;
+
+        // var dealer = stage.addChild(new Dealer());
+        // dealer.pickCard();
+
+        var dealer = stage.addChild(cards.pickRandom());
+        window.dealer = dealer;
+        window.player = player;
         window.cards = cards;
         window.PIXI = PIXI;
 

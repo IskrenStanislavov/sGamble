@@ -17,6 +17,11 @@ define(function(require) {
         this.back.alpha = 0;
     };
 
-    return {Card:Card};
+    Card.pickRandom = function(){
+        var cardSuit = config.deck.suits[Math.floor(Math.random()*config.deck.suits.length)];
+        var cardId = config.deck.ids[Math.floor(Math.random()*config.deck.suits.length)];
+        return new Card( cardId, cardSuit );
+    };
+    return {Card:Card, pickRandom:Card.pickRandom};
 
 });
