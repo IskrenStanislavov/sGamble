@@ -14,7 +14,7 @@ define(function(require) {
     requestAnimFrame(animate);
     function animate() {
         renderer.render(stage);
-        // requestAnimFrame(animate);
+        requestAnimFrame(animate);
     }
 
     var loader = new PIXI.AssetLoader([
@@ -27,9 +27,10 @@ define(function(require) {
         face.reveal();
         face.x = 100;
         var back = stage.addChild(new cards.Card("J", "spades"));
-        back.x = 200;
+        back.x = 100;
+        window.face = face;
+        window.back = back;
         requestAnimFrame(animate);
-
     };
 
     loader.load();
