@@ -25,6 +25,10 @@ define(function(){
             "backTextures" : "images/back.png",
         },
 
+        "player": {
+            "choices": 5
+        },
+
         "canvas": {
             "width": 800,
             "height": 600,
