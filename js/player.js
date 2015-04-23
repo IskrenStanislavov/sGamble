@@ -1,14 +1,13 @@
 define(function(require) {
     var PIXI        = require("libs/pixi");
     var config      = require("config");
-    var cards       = require("cards");
 
-    var Player = function() {
+    var Player = function( deck ) {
         PIXI.DisplayObjectContainer.call(this);
+        this.deck = deck;
         this.cards = [];
         // XXX: empty slots for the cards
         // XXX: assure player cannot pick the same card as the dealer
-        // XXX: can simulate server this case.
     };
 
     Player.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -18,7 +17,7 @@ define(function(require) {
         var that = this;
         this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i) {
             // http://stackoverflow.com/a/10050831/3345926
-            card = that.addChild(cards.pickRandom());
+            card = that.addChild(that.deck.pickRandom());
             card.x = i*100;
             card.y = 200;
             return card;

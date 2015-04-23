@@ -1,6 +1,6 @@
 define(function(require) {
     var PIXI        = require("libs/pixi");
-    var cards       = require("cards");
+    var Deck        = require("deck");
     var Player      = require("player");
     var Dealer      = require("dealer");
     var config      = require("config");
@@ -24,15 +24,17 @@ define(function(require) {
         ]);
 
     loader.onComplete = function() {
-        var player = stage.addChild(new Player());
+        var deck = new Deck();
+
+        var player = stage.addChild(new Player(deck));
         player.pickCards();
 
-        var dealer = stage.addChild(new Dealer());
+        var dealer = stage.addChild(new Dealer(deck));
         dealer.pickCard();
 
         // window.dealer = dealer;
         // window.player = player;
-        // window.cards = cards;
+        // window.deck = deck;
         // window.PIXI = PIXI;
 
         requestAnimFrame(animate);
