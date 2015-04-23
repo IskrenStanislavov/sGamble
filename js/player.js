@@ -18,8 +18,8 @@ define(function(require) {
         this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i) {
             // http://stackoverflow.com/a/10050831/3345926
             card = that.addChild(that.deck.pickRandom());
-            card.x = i*100;
-            card.y = 200;
+            card.x = 307 + i * (card.width + config.player.cardsOffset);
+            card.y = 290;
             return card;
         });
     };

@@ -6,7 +6,6 @@ define(function(require) {
         PIXI.DisplayObjectContainer.call(this);
         this.deck = deck;
         this.cards = [];
-        // XXX: empty slot for the card
     };
 
     Dealer.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -14,7 +13,8 @@ define(function(require) {
     Dealer.prototype.pickCard = function(){
         this.children.length = 0;
         this.card = this.addChild(this.deck.pickRandom());
-        this.card.x = 100;
+        this.card.x = 85;
+        this.card.y = 290;
     };
 
     Dealer.prototype.reveal = function( chosen ) {

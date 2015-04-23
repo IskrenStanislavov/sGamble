@@ -26,12 +26,20 @@ define(function(){
         },
 
         "player": {
+            "cardsOffset": 16,//in pixels
             "choices": 5
         },
 
+        "stageImages": {
+            "logo"      :"images/logo.png",
+            "dealerBG"  :"images/dealerBG.png",
+            "playerBG"  :"images/playerBG.png",
+            "footer"    :"images/footerBar.png"
+        },
+
         "canvas": {
-            "width": 800,
-            "height": 600,
+            "width": 1024,
+            "height": 768,
             "id": "game"
         },
     }; 
