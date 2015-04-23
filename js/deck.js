@@ -19,8 +19,10 @@ define(function(require) {
 
     var Deck = function(){
         this.fullDeck = Array.apply(null, Array(52)).map(function (_, i) {
-            console.log(i%13, Math.floor(i/13));
-            return i;
+            return {
+                "suit": config.deck.suits[Math.floor(i/13)],
+                "id": config.deck.ids[i%13]
+            };
         });
 
         this.resetDeck();
@@ -34,11 +36,8 @@ define(function(require) {
 
     Deck.prototype.pickRandom = function() {
         var choice = Math.floor(Math.random() * this.currentAvailableCards.length);
-
-        var cardSuit = config.deck.suits[Math.floor(choice/13)];//config.deck.suits[Math.floor(Math.random()*config.deck.suits.length)];
-        var cardId = config.deck.ids[choice%13];//config.deck.ids[Math.floor(Math.random()*config.deck.ids.length)];
-
-        return new Card( cardId, cardSuit );
+        var cardData = this.currentAvailableCards.splice(choice, 1)[0];
+        return new Card( cardData.id, cardData.suit );
     };
 
 
