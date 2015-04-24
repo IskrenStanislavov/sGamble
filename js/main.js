@@ -17,7 +17,7 @@ define(function(require) {
         renderer.render(stage);
         requestAnimFrame(animate);
     }
-    requestAnimFrame(animate);
+    // requestAnimFrame(animate);
 
     var loader = new PIXI.AssetLoader([
         config.deck.faceTextures,
@@ -32,10 +32,13 @@ define(function(require) {
         var deck = new Deck();
 
         var player = stage.addChild(new Player(deck));
-        player.pickCards();
-
         var dealer = stage.addChild(new Dealer(deck));
-        dealer.pickCard();
+
+        stage.swapChildren(player,dealer);
+
+        dealer.pickCard(function(){
+            player.pickCards();
+        });
 
         window.dealer = dealer;
         window.player = player;

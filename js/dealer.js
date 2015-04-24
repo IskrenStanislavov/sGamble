@@ -1,6 +1,7 @@
 define(function(require) {
     var PIXI        = require("libs/pixi");
     var config      = require("config");
+    require("libs/TweenMax.min");
 
     var Dealer = function( deck ) {
         PIXI.DisplayObjectContainer.call(this);
@@ -16,13 +17,20 @@ define(function(require) {
 
     Dealer.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
 
-    Dealer.prototype.pickCard = function(){
+    Dealer.prototype.pickCard = function(callback){
         this.children.length = 0;
         this.addChild(this.dealerBG);
 
         this.card = this.addChild(this.deck.pickRandom());
-        this.card.x = 85;
-        this.card.y = 240;
+        this.slideToPlace(callback);
+    };
+
+    Dealer.prototype.slideToPlace = function(callback){
+        TweenLite.fromTo(this.card, 0.5, config.deck.pilePosition, {x:85, y:240, onComplete:callback},0.3);
+    };
+
+    Dealer.prototype.slideBack = function(){
+        TweenLite.to(this.card, 0.5, config.deck.pilePosition);
     };
 
     Dealer.prototype.reveal = function( chosen ) {

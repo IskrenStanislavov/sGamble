@@ -10,6 +10,8 @@ define(function(require) {
 
         this.back = this.addChild(PIXI.Sprite.fromImage(config.deck.backTextures));
         this.back.alpha = 1;
+        this.x = config.deck.pilePosition.x;
+        this.y = config.deck.pilePosition.y;
     };
     Card.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     Card.prototype.reveal = function(){

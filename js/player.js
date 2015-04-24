@@ -26,7 +26,17 @@ define(function(require) {
             card.y = 240;
             return card;
         });
+        this.slideToPlace();
     };
+
+    Player.prototype.slideToPlace = function(callback){
+        TweenMax.staggerFrom(this.cards, 0.5, config.deck.pilePosition,0.3);
+    };
+
+    Player.prototype.slideBack = function(){
+        TweenLite.to(this.card, 0.5, config.deck.pilePosition);
+    };
+
 
     Player.prototype.reveal = function( chosen ) {
         this.cards.forEach(function(card, index){

@@ -14,6 +14,10 @@ define(function(require) {
         this.footer.x = 512;
         this.footer.y = config.canvas.height;
 
+        this.deckPile = this.addChild(new PIXI.Sprite.fromImage(config.stageImages.deckPile));
+        this.deckPile.anchor = new PIXI.Point(0, 0);
+        this.deckPile.position = config.deck.pilePosition;
+
     };
 
     Background.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);

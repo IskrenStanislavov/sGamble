@@ -23,6 +23,7 @@ define(function(){
             "ids": cardIds.slice(1).concat("A"),
             "faceTextures" : "images/deck.json",
             "backTextures" : "images/back.png",
+            "pilePosition" : { "x":40, "y": 490 }
         },
 
         "player": {
@@ -34,6 +35,7 @@ define(function(){
             "logo"      :"images/logo.png",
             "dealerBG"  :"images/dealerBG.png",
             "playerBG"  :"images/playerBG.png",
+            "deckPile"  :"images/deckPile.png",
             "footer"    :"images/footerBar.png"
         },
 
