@@ -1,7 +1,6 @@
 define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
-    require("libs/TweenMax.min");
 
     var Dealer = function(deck){
         PIXI.DisplayObjectContainer.call(this);

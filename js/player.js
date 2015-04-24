@@ -1,6 +1,7 @@
 define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
+    var Button      = require("button");
 
     var Player = function(deck){
         PIXI.DisplayObjectContainer.call(this);
@@ -11,13 +12,18 @@ define(function(require){
         this.playerBG.anchor = new PIXI.Point(1.0, 0.5);
         this.playerBG.x = config.canvas.width - 40;
         this.playerBG.y = 374;
+
+        this.buttons = {
+            double   : this.addChild(new Button(config.buttons.double)),
+            half     : this.addChild(new Button(config.buttons.half)),
+        };
     };
 
     Player.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
 
     Player.prototype.pickCards = function(callback){
-        this.children.length = 0;
-        this.addChild(this.playerBG);
+        // this.children.length = 0;
+        // this.addChild(this.playerBG);
         var that = this;
         this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i){
             // http://stackoverflow.com/a/10050831/3345926
@@ -33,7 +39,7 @@ define(function(require){
         var motionData = Object.create(config.deck.pilePosition);
         motionData.x += 1;
         motionData.y += 1;
-        new TimelineMax().staggerFrom(this.cards, 0.5, motionData, 0.3).add(callback);
+        new TimelineMax({onComplete:callback}).staggerFrom(this.cards, 0.5, motionData, 0.3).add(callback);
     };
 
     Player.prototype.slideBack = function(){

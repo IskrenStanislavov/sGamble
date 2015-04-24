@@ -1,47 +1,70 @@
-        var button = new PIXI.Sprite(textureButton);
-        button.buttonMode = true;
-        button.anchor.x = 0.5;
-        button.anchor.y = 0.5;
-        button.position.x = buttonPositions[i*2];
-        button.position.y = buttonPositions[i*2 + 1];
-        // make the button interactive..
-        button.interactive = true;
-        // set the mousedown and touchstart callback..
-        button.mousedown = button.touchstart = function(data){
-            this.isdown = true;
-            this.setTexture(textureButtonDown);
-            this.alpha = 1;
+define(function(require){
+    var PIXI        = require("libs/pixi");
+    var Signal      = require("libs/signals.min");
+
+    var Button = function(config){
+
+        this.normal = new PIXI.Texture.fromImage(config.normal);
+        this.setTexture();
+
+        this.over = new PIXI.Texture.fromImage(config.over);
+        this.down = new PIXI.Texture.fromImage(config.down);
+
+        PIXI.Sprite.call(this, this.normal);
+        this.x = config.x;
+        this.y = config.y;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.isDown = false;
+
+        this.events = {
+            click: new Signal()
         };
-        // set the mouseup and touchend callback..
-        button.mouseup = button.touchend = button.mouseupoutside = button.touchendoutside = function(data){
-            this.isdown = false;
-            if (this.isOver)
-            {
-                this.setTexture(textureButtonOver);
-            }
-            else
-            {
-                this.setTexture(textureButton);
-            }
-        };
-        // set the mouseover callback..
-        button.mouseover = function(data){
-            this.isOver = true;
-            if (this.isdown)
-                return;
-            this.setTexture(textureButtonOver);
-        };
-        // set the mouseout callback..
-        button.mouseout = function(data){
-            this.isOver = false;
-            
-            if (this.isdown)
-                return;
-            this.setTexture(textureButton)
-        };
-        button.click = function(data){
-            console.log("CLICK!");
-        };
-        button.tap = function(data){
-            console.log("TAP!!");
-        };
+    };
+
+    Button.prototype = Object.create(PIXI.Sprite.prototype);
+
+
+    Button.prototype.mousedown = Button.prototype.touchstart = function(data){
+        this.isDown = true;
+        this.setTexture(this.down);
+        this.alpha = 1;
+    };
+
+    Button.prototype.mouseup = Button.prototype.touchend = Button.prototype.mouseupoutside = Button.prototype.touchendoutside = function(data){
+        this.isDown = false;
+        if (this.isOver){
+            this.setTexture(this.over);
+        } else {
+            this.setTexture(this.normal);
+        }
+    };
+
+    Button.prototype.mouseover = function(data){
+        this.isOver = true;
+        if (this.isDown){
+            return;
+        }
+        this.setTexture(this.over);
+    };
+
+    Button.prototype.mouseout = function(data){
+        this.isOver = false;
+        
+        if (this.isDown){
+            return;
+        }
+        this.setTexture(this.normal)
+    };
+
+    Button.prototype.click = function(data){
+        this.events.click.dispatch();
+        console.log("CLICK!");
+    };
+
+    Button.prototype.tap = function(data){
+        this.events.click.dispatch();
+        console.log("TAP!!");
+    };
+    return Button;
+});

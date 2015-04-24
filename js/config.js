@@ -36,7 +36,40 @@ define(function(){
             "dealerBG"  :"images/dealerBG.png",
             "playerBG"  :"images/playerBG.png",
             "deckPile"  :"images/deckPile.png",
+            "question"  :"images/gambleQuestion.png",
             "footer"    :"images/footerBar.png"
+        },
+
+        "buttons":{
+            "double":{
+                "x"        : 700,
+                "y"        : 440,
+                "normal"   : "images/doubleNormal.png",
+                "down"     : "images/doubleDown.png",
+                "over"     : "images/doubleHover.png"
+            },
+            "half":{
+                "x"        : 330,
+                "y"        : 440,
+                "normal"   : "images/doubleHalfNormal.png",
+                "down"     : "images/doubleHalfDown.png",
+                "over"     : "images/doubleHalfHover.png"
+
+            },
+            "yes":{
+                "x"        : 330,
+                "y"        : 610,
+                "normal"   : "images/yesNormal.png",
+                "down"     : "images/yesDown.png",
+                "over"     : "images/yesHover.png"
+            },
+            "no":{
+                "x"        : 700,
+                "y"        : 610,
+                "normal"   : "images/noNormal.png",
+                "down"     : "images/noDown.png",
+                "over"     : "images/noHover.png"
+            }
         },
 
         "canvas": {
