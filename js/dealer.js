@@ -32,8 +32,6 @@ define(function(require){
     };
 
     Dealer.prototype.pickCard = function(callback){
-        this.children.length = 0;
-        this.addChild(this.dealerBG);
 
         this.card = this.addChild(this.deck.pickRandom());
         this.slideToPlace(callback);

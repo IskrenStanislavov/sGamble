@@ -19,6 +19,10 @@ define(function(require){
         };
 
         this.x = this.hiddenX = config.canvas.width;
+
+        this.collectMotionData = Object.create(config.deck.pilePosition);
+        this.collectMotionData.x += 1;
+        this.collectMotionData.y += 1;
     };
 
     Player.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -38,18 +42,24 @@ define(function(require){
     };
 
     Player.prototype.enableButtons = function(){
-        this.buttons.double.enable();
         this.buttons.half.enable();
+        this.buttons.double.enable();
     };
 
     Player.prototype.disableButtons = function(){
-        this.buttons.double.disable();
         this.buttons.half.disable();
+        this.buttons.double.disable();
     };
 
-    Player.prototype.pickCards = function(callback){
-        // this.children.length = 0;
-        // this.addChild(this.playerBG);
+    Player.prototype.collectCards = function(callback){
+        if (this.cards){
+            new TimelineMax({onComplete:callback}).staggerTo(this.cards, 0.25, Object.create(this.collectMotionData), 0.3);
+        } else {
+            callback && callback();
+        }
+    };
+
+    Player.prototype.spreadCards = function(callback){
         var that = this;
         this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i){
             // http://stackoverflow.com/a/10050831/3345926
@@ -58,14 +68,18 @@ define(function(require){
             card.y = 240;
             return card;
         });
-        this.slideToPlace(callback);
+        new TimelineMax({onComplete:callback}).staggerFrom(this.cards, 0.25, Object.create(this.collectMotionData), 0.3);
     };
 
-    Player.prototype.slideToPlace = function(callback){
-        var motionData = Object.create(config.deck.pilePosition);
-        motionData.x += 1;
-        motionData.y += 1;
-        new TimelineMax({onComplete:callback}).staggerFrom(this.cards, 0.5, motionData, 0.3).add(callback);
+    Player.prototype.pickCards = function(callback){
+        var that = this;
+        this.collectCards(function(){
+            that.cards.forEach(function(card){
+                that.removeChild(card);
+            });
+            that.spreadCards(callback);
+        });
+
     };
 
     Player.prototype.slideBack = function(){

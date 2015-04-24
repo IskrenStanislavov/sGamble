@@ -29,13 +29,18 @@ define(function(require){
 
     loader.onComplete = function(){
         var question = window.question = stage.addChild(new Question());
-        question.buttons.yes.events.clicked
         window.background = stage.addChild(new Background);
 
         var deck = new Deck();
         var dealer = window.dealer = stage.addChild(new Dealer(deck));
         var player = window.player = stage.addChild(new Player(deck));
 
+        player.buttons.double.events.click.add(function(){
+            console.log("tap");
+        });
+        player.buttons.half.events.click.add(function(){
+            console.log("tap2");
+        });
         question.show(function(){
             question.buttons.yes.events.click.addOnce(function(){
                 // console.log("fine lets play");
