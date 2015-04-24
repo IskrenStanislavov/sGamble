@@ -17,6 +17,7 @@ define(function(require){
         this.buttonMode = true;
         this.isDown = false;
 
+        this.disable();
         this.events = {
             click: new Signal()
         };
@@ -24,6 +25,17 @@ define(function(require){
 
     Button.prototype = Object.create(PIXI.Sprite.prototype);
 
+    Button.prototype.enable = function(){
+        this.interactive = true;
+        this.buttonMode = true;
+        this.alpha = 1.0;
+    };
+
+    Button.prototype.disable = function(){
+        this.interactive = false;
+        this.buttonMode = false;
+        this.alpha = 0.7;
+    };
 
     Button.prototype.mousedown = Button.prototype.touchstart = function(data){
         this.isDown = true;
@@ -59,12 +71,10 @@ define(function(require){
 
     Button.prototype.click = function(data){
         this.events.click.dispatch();
-        console.log("CLICK!");
     };
 
     Button.prototype.tap = function(data){
         this.events.click.dispatch();
-        console.log("TAP!!");
     };
     return Button;
 });

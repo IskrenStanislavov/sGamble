@@ -17,9 +17,35 @@ define(function(require){
             double   : this.addChild(new Button(config.buttons.double)),
             half     : this.addChild(new Button(config.buttons.half)),
         };
+
+        this.x = this.hiddenX = config.canvas.width;
     };
 
     Player.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+
+    Player.prototype.show = function(callback){
+        TweenMax.to(this, 0.5, {
+            "x":0,
+            "onComplete":callback
+        });
+    };
+
+    Player.prototype.hide = function(callback){
+        TweenMax.to(this, 0.5, {
+            "x": this.hiddenX,
+            "onComplete":callback
+        });
+    };
+
+    Player.prototype.enableButtons = function(){
+        this.buttons.double.enable();
+        this.buttons.half.enable();
+    };
+
+    Player.prototype.disableButtons = function(){
+        this.buttons.double.disable();
+        this.buttons.half.disable();
+    };
 
     Player.prototype.pickCards = function(callback){
         // this.children.length = 0;

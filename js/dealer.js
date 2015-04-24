@@ -12,9 +12,24 @@ define(function(require){
         this.dealerBG.x = 40;
         this.dealerBG.y = 339;
 
+        this.x = this.hiddenX = -400;
     };
 
     Dealer.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+
+    Dealer.prototype.show = function(callback){
+        TweenMax.to(this, 0.5, {
+            "x":0,
+            "onComplete":callback
+        });
+    };
+
+    Dealer.prototype.hide = function(callback){
+        TweenMax.to(this, 0.5, {
+            "x": this.hiddenX,
+            "onComplete":callback
+        });
+    };
 
     Dealer.prototype.pickCard = function(callback){
         this.children.length = 0;

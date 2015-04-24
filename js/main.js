@@ -28,15 +28,31 @@ define(function(require){
         ]);
 
     loader.onComplete = function(){
-        window.question = stage.addChild(new Question());
+        var question = window.question = stage.addChild(new Question());
+        question.buttons.yes.events.clicked
         window.background = stage.addChild(new Background);
 
-
-
         var deck = new Deck();
+        var dealer = window.dealer = stage.addChild(new Dealer(deck));
+        var player = window.player = stage.addChild(new Player(deck));
 
-        var dealer = stage.addChild(new Dealer(deck));
-        var player = stage.addChild(new Player(deck));
+        question.show(function(){
+            question.buttons.yes.events.click.addOnce(function(){
+                // console.log("fine lets play");
+                question.disableButtons();
+                question.hide(function(){
+                    // console.log("show play spaces");
+                    dealer.show(function(){
+                        player.show(function(){
+                            // console.log("ready shown");
+                            player.enableButtons();
+                        });
+                    });
+                });
+            })
+            question.enableButtons();
+
+        });
 
         // dealer.pickCard(function(){
         //     player.pickCards(function(){
