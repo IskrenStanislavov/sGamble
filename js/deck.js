@@ -1,9 +1,9 @@
-define(function(require) {
+define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
 
 
-    var Card = function(cardId, cardSuit) {
+    var Card = function(cardId, cardSuit){
         PIXI.DisplayObjectContainer.call(this);
         this.face = this.addChild(PIXI.Sprite.fromImage(cardSuit + cardId + ".png"));
         this.face.alpha = 0;
@@ -20,7 +20,7 @@ define(function(require) {
     };
 
     var Deck = function(){
-        this.fullDeck = Array.apply(null, Array(52)).map(function (_, i) {
+        this.fullDeck = Array.apply(null, Array(52)).map(function (_, i){
             return {
                 "suit": config.deck.suits[Math.floor(i/13)],
                 "id": config.deck.ids[i%13]
@@ -31,15 +31,15 @@ define(function(require) {
 
     };
 
-    Deck.prototype.resetDeck = function() {
+    Deck.prototype.resetDeck = function(){
         this.currentAvailableCards = this.fullDeck.slice();
         // this.currentAvailableCards.shuffle();
     };
 
-    Deck.prototype.pickRandom = function() {
+    Deck.prototype.pickRandom = function(){
         var choice = Math.floor(Math.random() * this.currentAvailableCards.length);
         var cardData = this.currentAvailableCards.splice(choice, 1)[0];
-        return new Card( cardData.id, cardData.suit );
+        return new Card(cardData.id, cardData.suit);
     };
 
 

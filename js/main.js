@@ -1,4 +1,4 @@
-define(function(require) {
+define(function(require){
     var PIXI        = require("libs/pixi");
     var Background  = require("background");
     var Deck        = require("deck");
@@ -6,14 +6,14 @@ define(function(require) {
     var Dealer      = require("dealer");
     var config      = require("config");
 
-    var stage = new PIXI.Stage(0x00749f);
+    var stage = new PIXI.Stage(0x3065a2);
     var renderer = PIXI.autoDetectRenderer(config.canvas.width, config.canvas.height, {
         "roundPixels": true,
         "antialias": true
     });
 
     document.body.appendChild(renderer.view);
-    function animate() {
+    function animate(){
         renderer.render(stage);
         requestAnimFrame(animate);
     }
@@ -25,7 +25,7 @@ define(function(require) {
         config.stageImages.logo,
         ]);
 
-    loader.onComplete = function() {
+    loader.onComplete = function(){
         window.background = stage.addChild(new Background);
 
 
@@ -37,7 +37,9 @@ define(function(require) {
         stage.swapChildren(player,dealer);
 
         dealer.pickCard(function(){
-            player.pickCards();
+            player.pickCards(function(){
+                dealer.reveal();
+            });
         });
 
         window.dealer = dealer;
@@ -46,11 +48,6 @@ define(function(require) {
         // window.PIXI = PIXI;
 
         requestAnimFrame(animate);
-
-        // setTimeout(function(){
-        //     dealer.reveal();
-        //     player.reveal();
-        // }, 1500);
     };
 
     loader.load();

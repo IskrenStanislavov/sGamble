@@ -7,13 +7,13 @@
         // make the button interactive..
         button.interactive = true;
         // set the mousedown and touchstart callback..
-        button.mousedown = button.touchstart = function(data) {
+        button.mousedown = button.touchstart = function(data){
             this.isdown = true;
             this.setTexture(textureButtonDown);
             this.alpha = 1;
         };
         // set the mouseup and touchend callback..
-        button.mouseup = button.touchend = button.mouseupoutside = button.touchendoutside = function(data) {
+        button.mouseup = button.touchend = button.mouseupoutside = button.touchendoutside = function(data){
             this.isdown = false;
             if (this.isOver)
             {
@@ -25,23 +25,23 @@
             }
         };
         // set the mouseover callback..
-        button.mouseover = function(data) {
+        button.mouseover = function(data){
             this.isOver = true;
             if (this.isdown)
                 return;
             this.setTexture(textureButtonOver);
         };
         // set the mouseout callback..
-        button.mouseout = function(data) {
+        button.mouseout = function(data){
             this.isOver = false;
             
             if (this.isdown)
                 return;
             this.setTexture(textureButton)
         };
-        button.click = function(data) {
+        button.click = function(data){
             console.log("CLICK!");
         };
-        button.tap = function(data) {
+        button.tap = function(data){
             console.log("TAP!!");
         };

@@ -1,7 +1,7 @@
 define(function(){
-    var cardIds = Array.apply(null, Array(13)).map(function (_, i) {
+    var cardIds = Array.apply(null, Array(13)).map(function (_, i){
         // http://stackoverflow.com/a/10050831/3345926
-        switch(i) {
+        switch(i){
             case 0:
                 return "A";
             case 10:

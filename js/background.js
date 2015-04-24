@@ -1,8 +1,8 @@
-define(function(require) {
+define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
 
-    var Background = function( deck ) {
+    var Background = function(){
         PIXI.DisplayObjectContainer.call(this);
         this.logo = this.addChild(new PIXI.Sprite.fromImage(config.stageImages.logo));
         this.logo.anchor = new PIXI.Point(0.5, 0.5);

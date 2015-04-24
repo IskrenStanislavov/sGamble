@@ -1,9 +1,9 @@
-define(function(require) {
+define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
     require("libs/TweenMax.min");
 
-    var Dealer = function( deck ) {
+    var Dealer = function(deck){
         PIXI.DisplayObjectContainer.call(this);
         this.deck = deck;
         this.cards = [];
@@ -33,8 +33,8 @@ define(function(require) {
         TweenLite.to(this.card, 0.5, config.deck.pilePosition);
     };
 
-    Dealer.prototype.reveal = function( chosen ) {
-        this.card.reveal();
+    Dealer.prototype.reveal = function(callback){
+        this.card.reveal(callback);
     };
 
     return Dealer;

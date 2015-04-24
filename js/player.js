@@ -1,8 +1,8 @@
-define(function(require) {
+define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
 
-    var Player = function( deck ) {
+    var Player = function(deck){
         PIXI.DisplayObjectContainer.call(this);
         this.deck = deck;
         this.cards = [];
@@ -15,32 +15,34 @@ define(function(require) {
 
     Player.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
 
-    Player.prototype.pickCards = function(){
+    Player.prototype.pickCards = function(callback){
         this.children.length = 0;
         this.addChild(this.playerBG);
         var that = this;
-        this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i) {
+        this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i){
             // http://stackoverflow.com/a/10050831/3345926
             card = that.addChild(that.deck.pickRandom());
             card.x = 307 + i * (card.width + config.player.cardsOffset);
             card.y = 240;
             return card;
         });
-        this.slideToPlace();
+        this.slideToPlace(callback);
     };
 
     Player.prototype.slideToPlace = function(callback){
-        TweenMax.staggerFrom(this.cards, 0.5, config.deck.pilePosition,0.3);
+        var motionData = Object.create(config.deck.pilePosition);
+        motionData.x += 1;
+        motionData.y += 1;
+        new TimelineMax().staggerFrom(this.cards, 0.5, motionData, 0.3).add(callback);
     };
 
     Player.prototype.slideBack = function(){
-        TweenLite.to(this.card, 0.5, config.deck.pilePosition);
+        TweenLite.to(this.cards, 0.5, config.deck.pilePosition);
     };
 
-
-    Player.prototype.reveal = function( chosen ) {
+    Player.prototype.reveal = function(chosen){
         this.cards.forEach(function(card, index){
-            if ( chosen == index ){
+            if (chosen == index){
                 console.log(card);
             }
             card.reveal();
