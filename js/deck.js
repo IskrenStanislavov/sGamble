@@ -23,6 +23,10 @@ define(function(require){
         this.y = config.deck.pilePosition.y;
     };
     Card.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+    Card.prototype.highlight = function(){
+        TweenMax.to(this.back, 0.15, {alpha:0.9,scale:1.1, repeat:-1, yoyo:true});
+    };
+
     Card.prototype.reveal = function(callback){
         var flip = new TimelineMax({"onComplete":callback});
         flip.add([

@@ -6,6 +6,7 @@ define(function(require){
     var Dealer      = require("dealer");
     var config      = require("config");
     var Question    = require("questionHolder");
+    var Messages    = require("messages");
     require("libs/TweenMax.min");
 
     var stage = new PIXI.Stage(0x3065a2);
@@ -30,17 +31,29 @@ define(function(require){
     loader.onComplete = function(){
         var question = window.question = stage.addChild(new Question());
         window.background = stage.addChild(new Background);
+        window.messages = stage.addChild(new Messages);
 
         var deck = new Deck();
         var dealer = window.dealer = stage.addChild(new Dealer(deck));
         var player = window.player = stage.addChild(new Player(deck));
 
+        var betChosen = function(mult){
+            player.disableButtons();
+            player.setBet(mult);            
+            dealer.reveal(function(){
+                player.startHighlights();
+                player.allowToPick();
+            });
+        };
+
         player.buttons.double.events.click.add(function(){
-            console.log("tap");
+            betChosen(2);
         });
+
         player.buttons.half.events.click.add(function(){
-            console.log("tap2");
+            betChosen(1);
         });
+
         question.show(function(){
             question.buttons.yes.events.click.addOnce(function(){
                 // console.log("fine lets play");
@@ -50,7 +63,11 @@ define(function(require){
                     dealer.show(function(){
                         player.show(function(){
                             // console.log("ready shown");
-                            player.enableButtons();
+                            dealer.pickCard(function(){
+                                player.pickCards(function(){
+                                    player.enableButtons();
+                                });
+                            });
                         });
                     });
                 });
@@ -59,11 +76,6 @@ define(function(require){
 
         });
 
-        // dealer.pickCard(function(){
-        //     player.pickCards(function(){
-        //         dealer.reveal();
-        //     });
-        // });
 
         // window.dealer = dealer;
         // window.player = player;

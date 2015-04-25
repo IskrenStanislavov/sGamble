@@ -23,6 +23,7 @@ define(function(require){
         this.collectMotionData = Object.create(config.deck.pilePosition);
         this.collectMotionData.x += 1;
         this.collectMotionData.y += 1;
+
     };
 
     Player.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -93,6 +94,19 @@ define(function(require){
             }
             card.reveal();
         });
+    };
+
+    Player.prototype.setBet = function(multiplier){
+        this.multiplier = multiplier;
+    };
+
+    Player.prototype.startHighlights = function(){
+        this.tweens = TweenMax.fromTo(this.cards,0.15,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(-1);
+    };
+
+    Player.prototype.stopHighlights = function(){
+        this.tweens.time(0).kill();
+        this.tweens = undefined;
     };
 
     return Player;
