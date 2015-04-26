@@ -2,9 +2,10 @@ define(function(require){
     var PIXI        = require("libs/pixi");
     var config      = require("config");
 
-    var Card = function(cardId, cardSuit){
+    var Card = function(cardData){
         PIXI.DisplayObjectContainer.call(this);
-        this.face = this.addChild(PIXI.Sprite.fromImage(cardSuit + cardId + ".png"));
+        this.cardData = cardData;
+        this.face = this.addChild(PIXI.Sprite.fromImage(cardData.picture));
         this.face.anchor = new PIXI.Point(0.5, 0.5);
         this.face.alpha = 0;
         this.face.scale.x = -1;
@@ -25,6 +26,10 @@ define(function(require){
     Card.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     Card.prototype.highlight = function(){
         TweenMax.to(this.back, 0.15, {alpha:0.9,scale:1.1, repeat:-1, yoyo:true});
+    };
+
+    Card.prototype.getValue = function(){
+        return this.cardData.value;
     };
 
     Card.prototype.enable = function(){

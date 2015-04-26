@@ -12,7 +12,8 @@ define(function(require){
         INIT            :0,
         PREPARE_TABLE   :1,
         DEAL            :2,
-        AWAIT_FOR_CHOICE:3,
+        BET_CHOICE      :3,
+        AWAIT_FOR_CHOICE:4,
     };
 
     var App = function(){
@@ -37,7 +38,7 @@ define(function(require){
         switch (state){
             case STATES.INIT:
                 that.question.show(function(){
-                    that.messages.setText("Choose anwser!");
+                    that.messages.setText("CHOOSE ANWSER!");
                     that.question.buttons.yes.events.click.addOnce(function(){
                         that.messages.setText("");
                         that.question.disableButtons();
@@ -58,27 +59,40 @@ define(function(require){
             case STATES.DEAL:
                 that.dealer.dealCard(function(){
                     that.player.dealCards(function(){
-                        that.messages.setText("Choose your bet!");
-                        that.player.enableButtons(function(mult){
-                            that.messages.setText("");
-                            that.player.disableButtons();
-                            that.player.setBet(mult);
-                            that.dealer.reveal(function(){
-                                that.setState(STATES.AWAIT_FOR_CHOICE);
-                            });
-                        });
+                        that.setState(STATES.BET_CHOICE);
+                    });
+                });
+            break;
+            case STATES.BET_CHOICE:
+                that.messages.setText("CHOOSE YOUR BET!");
+                that.player.enableButtons(function(mult){
+                    that.messages.setText("");
+                    that.player.disableButtons();
+                    that.player.setBet(mult);
+                    that.dealer.reveal(function(){
+                        that.setState(STATES.AWAIT_FOR_CHOICE);
                     });
                 });
             break;
             case STATES.AWAIT_FOR_CHOICE:
                 that.player.startHighlights();
-                that.messages.setText("Pick a Greater card to Win!");
+                that.messages.setText("PICK A GREATER CARD TO WIN!");
                 that.player.allowPick(function(choice){
                     that.messages.setText("");
                     that.player.revealCard(choice);
-                }); //state pick
+                });
             break;
             default:
+            // Player.prototype._dealCards = function(callback){
+            //     var that = this;
+            //     this.collectCards(function(){
+            //         that.cards.forEach(function(card){
+            //             that.removeChild(card);
+            //         });
+            //         that.dealCards(callback);
+            //     });
+
+            // };
             throw "missing state:"+Object.keys(STATES)[state];
         }
     };

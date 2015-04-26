@@ -46,6 +46,7 @@ define(function(require){
     };
 
     Dealer.prototype.reveal = function(callback){
+        console.log("Dealer card value: " + this.card.getValue());
         this.card.reveal(callback);
     };
 

@@ -1,8 +1,13 @@
 define(function(){
-    var cardIds = Array.apply(null, Array(13)).map(function (_, i){
+    var cardValues = Array.apply(null, Array(13)).map(function (_, i){
         // http://stackoverflow.com/a/10050831/3345926
-        switch(i){
-            case 0:
+        return (i+2);
+    });
+
+    var cardIds = cardValues.map(function (cardValue, i){
+        // http://stackoverflow.com/a/10050831/3345926
+        switch(i+1){
+            case 13:
                 return "A";
             case 10:
                 return "J";
@@ -11,16 +16,17 @@ define(function(){
             case 12:
                 return "K";
             default:
-                return String(i+1);
+                return String(cardValue);
         }
         throw "wtf";
     });
-
+    console.log(cardIds);
     return {
         "deck":{
             // "suits": ["пика", "купа", "каро", "спатия"],
             "suits": ["spades", "hearts", "diamonds", "clubs"],
-            "ids": cardIds.slice(1).concat("A"),
+            "ids": cardIds,
+            "values": cardValues,
             "faceTextures" : "images/deck.json",
             "backTextures" : "images/back.png",
             "pilePosition" : { "x":40, "y": 490 }

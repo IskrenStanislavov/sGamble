@@ -89,17 +89,6 @@ define(function(require){
         });
     };
 
-    Player.prototype._dealCards = function(callback){
-        var that = this;
-        this.collectCards(function(){
-            that.cards.forEach(function(card){
-                that.removeChild(card);
-            });
-            that.dealCards(callback);
-        });
-
-    };
-
     Player.prototype.slideBack = function(){
         TweenLite.to(this.cards, 0.5, config.deck.pilePosition);
     };
