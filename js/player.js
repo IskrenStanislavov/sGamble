@@ -42,7 +42,16 @@ define(function(require){
         });
     };
 
-    Player.prototype.enableButtons = function(){
+    Player.prototype.enableButtons = function(callback){
+        var that = this;
+        function callbackWrapper(m){
+            that.buttons.double.events.click.remove(callbackWrapper);
+            that.buttons.half.events.click.remove(callbackWrapper);
+            callback && callback(m);
+        }
+        this.buttons.double.events.click.addOnce(callbackWrapper);
+        this.buttons.half.events.click.addOnce(callbackWrapper);
+
         this.buttons.half.enable();
         this.buttons.double.enable();
     };
@@ -60,7 +69,7 @@ define(function(require){
         }
     };
 
-    Player.prototype.spreadCards = function(callback){
+    Player.prototype.dealCards = function(callback){
         var that = this;
         this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i){
             // http://stackoverflow.com/a/10050831/3345926
@@ -72,13 +81,21 @@ define(function(require){
         new TimelineMax({onComplete:callback}).staggerFrom(this.cards, 0.25, Object.create(this.collectMotionData), 0.3);
     };
 
-    Player.prototype.pickCards = function(callback){
+    Player.prototype.allowPick = function(callback){
+        this.cards.forEach(function(card, cardIndex){
+            card.enable(function(){
+                callback && callback(cardIndex, card.value);
+            });
+        });
+    };
+
+    Player.prototype._dealCards = function(callback){
         var that = this;
         this.collectCards(function(){
             that.cards.forEach(function(card){
                 that.removeChild(card);
             });
-            that.spreadCards(callback);
+            that.dealCards(callback);
         });
 
     };
@@ -101,7 +118,7 @@ define(function(require){
     };
 
     Player.prototype.startHighlights = function(){
-        this.tweens = TweenMax.fromTo(this.cards,0.15,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(-1);
+        this.tweens = TweenMax.fromTo(this.cards,0.2,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(-1);
     };
 
     Player.prototype.stopHighlights = function(){

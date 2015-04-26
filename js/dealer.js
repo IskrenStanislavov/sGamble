@@ -31,7 +31,7 @@ define(function(require){
         });
     };
 
-    Dealer.prototype.pickCard = function(callback){
+    Dealer.prototype.dealCard = function(callback){
 
         this.card = this.addChild(this.deck.pickRandom());
         this.slideToPlace(callback);

@@ -13,6 +13,7 @@ define(function(require){
         PIXI.Sprite.call(this, this.normal);
         this.x = config.x;
         this.y = config.y;
+        this.value = config.value;
         this.interactive = true;
         this.buttonMode = true;
         this.isDown = false;
@@ -66,15 +67,15 @@ define(function(require){
         if (this.isDown){
             return;
         }
-        this.setTexture(this.normal)
+        this.setTexture(this.normal);
     };
 
     Button.prototype.click = function(data){
-        this.events.click.dispatch();
+        this.events.click.dispatch(this.value);
     };
 
     Button.prototype.tap = function(data){
-        this.events.click.dispatch();
+        this.events.click.dispatch(this.value);
     };
     return Button;
 });

@@ -44,6 +44,7 @@ define(function(){
             "double":{
                 "x"        : 700,
                 "y"        : 440,
+                "value"    : 2,
                 "normal"   : "images/doubleNormal.png",
                 "down"     : "images/doubleDown.png",
                 "over"     : "images/doubleHover.png"
@@ -51,6 +52,7 @@ define(function(){
             "half":{
                 "x"        : 330,
                 "y"        : 440,
+                "value"    : 1,
                 "normal"   : "images/doubleHalfNormal.png",
                 "down"     : "images/doubleHalfDown.png",
                 "over"     : "images/doubleHalfHover.png"
@@ -59,6 +61,7 @@ define(function(){
             "yes":{
                 "x"        : 330,
                 "y"        : 610,
+                "value"    : true,
                 "normal"   : "images/yesNormal.png",
                 "down"     : "images/yesDown.png",
                 "over"     : "images/yesHover.png"
@@ -66,6 +69,7 @@ define(function(){
             "no":{
                 "x"        : 700,
                 "y"        : 610,
+                "value"    : false,
                 "normal"   : "images/noNormal.png",
                 "down"     : "images/noDown.png",
                 "over"     : "images/noHover.png"

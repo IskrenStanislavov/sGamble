@@ -11,7 +11,7 @@ define(function(require){
         this.background.x = config.canvas.width - 40;
         this.background.y = 711;
 
-        this.text = this.addChild(new PIXI.Sprite.fromImage(config.stageImages.question));
+        this.text = this.addChild(new PIXI.Text("Do you want to gamble some credits?", {"fill":"white"}));
         this.text.anchor = new PIXI.Point(0.5, 0.5);
         this.text.x = 620;
         this.text.y = 585;
