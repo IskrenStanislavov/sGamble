@@ -82,10 +82,21 @@ define(function(require){
     };
 
     Player.prototype.allowPick = function(callback){
-        this.cards.forEach(function(card, cardIndex){
-            card.enable(function(){
-                callback && callback(cardIndex, card.value);
+        var that = this;
+        function chooseWrapper(cardChosen){
+            var choiceIndex;
+            that.cards.forEach(function(card, index){
+                card.disable(chooseWrapper);
+                if (card === cardChosen){
+                    choiceIndex = index;
+                }
+                // card.events.chosen.remove(chooseWrapper);
             });
+            callback && callback(choiceIndex, cardChosen.value);
+        };
+        this.cards.forEach(function(card, cardIndex){
+            // card.events.chosen.addOnce(chooseWrapper);
+            card.enable(chooseWrapper);
         });
     };
 
@@ -93,7 +104,7 @@ define(function(require){
         TweenLite.to(this.cards, 0.5, config.deck.pilePosition);
     };
 
-    Player.prototype.reveal = function(chosen){
+    Player.prototype.revealCard = function(chosen){
         this.cards.forEach(function(card, index){
             if (chosen == index){
                 console.log(card);
@@ -107,7 +118,7 @@ define(function(require){
     };
 
     Player.prototype.startHighlights = function(){
-        this.tweens = TweenMax.fromTo(this.cards,0.2,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(-1);
+        this.tweens = TweenMax.fromTo(this.cards,0.1,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(2);
     };
 
     Player.prototype.stopHighlights = function(){

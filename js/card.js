@@ -24,18 +24,63 @@ define(function(require){
     };
 
     Card.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
-    Card.prototype.highlight = function(){
-        TweenMax.to(this.back, 0.15, {alpha:0.9,scale:1.1, repeat:-1, yoyo:true});
-    };
-
     Card.prototype.getValue = function(){
         return this.cardData.value;
     };
 
-    Card.prototype.enable = function(){
+    Card.prototype.enable = function(callback){
+        this.chosenCallback = callback;
         this.interactive = true;
         this.buttonMode = true;
+        this.alpha = 0.7;
     };
+
+    Card.prototype.disable = function(){
+        this.chosenCallback = false;
+        this.interactive = false;
+        this.buttonMode = false;
+    };
+
+    Card.prototype.mousedown = Card.prototype.touchstart = function(data){
+        this.isDown = true;
+        this.scale = new PIXI.Point(1.1,1.1);
+    };
+
+    Card.prototype.mouseup = Card.prototype.touchend = Card.prototype.mouseupoutside = Card.prototype.touchendoutside = function(data){
+        this.isDown = false;
+        this.scale = new PIXI.Point(1.0,1.0);
+        if (this.isOver){
+            this.alpha = 1.0;
+        } else {
+            this.alpha = 0.7;
+        }
+    };
+
+    Card.prototype.mouseover = function(data){
+        this.isOver = true;
+        if (this.isDown){
+            return;
+        }
+        this.alpha = 1.0;
+    };
+
+    Card.prototype.mouseout = function(data){
+        this.isOver = false;
+        
+        if (this.isDown){
+            return;
+        }
+        this.alpha = 0.7;
+    };
+
+    Card.prototype.click = function(data){
+        this.chosenCallback(this);
+    };
+
+    Card.prototype.tap = function(data){
+        this.chosenCallback(this);
+    };
+
 
     Card.prototype.reveal = function(callback){
         var flip = new TimelineMax({"onComplete":callback});
