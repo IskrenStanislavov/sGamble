@@ -28,5 +28,26 @@ define(function(require){
         return new Card(cardData);
     };
 
+    Deck.prototype.dealPlayerCards = function(index, callback){
+        var card = this.pickRandom();
+        card.dealTo({
+            "x": 307 + index * (card.width + config.player.cardsOffset),
+            "y": 240
+        }, callback);
+        return card;
+    };
+
+    Deck.prototype.dealDealerCard = function(callback){
+        var card = this.pickRandom();
+        card.dealTo({
+            "x": 85,
+            "y": 240
+        }, callback);
+        return card;
+    };
+
+
+
+
     return Deck;
 });

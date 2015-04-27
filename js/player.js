@@ -79,38 +79,43 @@ define(function(require){
 
     Player.prototype.dealCards = function(callback){
         var that = this;
-        this.cards = Array.apply(null, Array(config.player.choices)).map(function (card, i){
+        this.cards = [];
+        Array.apply(null, Array(config.player.choices)).map(function (card, index){
             // http://stackoverflow.com/a/10050831/3345926
-            card = that.addChild(that.deck.pickRandom());
-            card.x = 307 + i * (card.width + config.player.cardsOffset);
-            card.y = 240;
-            return card;
+            setTimeout(function(){
+                if (index === config.player.choices-1){
+                    card = that.addChild(that.deck.dealPlayerCards(index, callback));
+                } else {
+                    card = that.addChild(that.deck.dealPlayerCards(index));
+                }
+                that.cards.push(card);
+            }, index*300);
         });
-        new TimelineMax({onComplete:callback}).staggerFrom(this.cards, 0.25, Object.create(this.collectMotionData), 0.3);
     };
 
-    Player.prototype.revealOnPick = function(callback){
+    Player.prototype.revealOnPick = function(onPick, callback){
         var that = this;
-        function chooseWrapper(cardChosen){
-            var choiceIndex;
-            cardChosen.alpha = 1;
-            that.chosenCard = cardChosen;
-            cardChosen.reveal(function(){
+        function chooseWrapper(chosenCard){
+            onPick && onPick();
+            that.chosenCard = that.cards.splice(that.cards.indexOf(chosenCard), 1)[0];
+            that.chosenCard.alpha = 1;
+
+            that.chosenCard.reveal(function(){
                 that.cards.forEach(function(card, index){
                     card.disable(chooseWrapper);
-                    if (card === cardChosen){
-                        return;
-                    }
-                    if (index === that.cards.length-1){
-                        card.reveal(function(){
-                            card.alpha = 0.8;
-                            callback && callback();
-                        });
-                    } else {
-                        card.reveal(function(){
-                            card.alpha = 0.8;
-                        });
-                    }
+                    setTimeout(function(){
+                        if (index === that.cards.length-1){
+                            card.reveal(function(){
+                                card.alpha = 0.8;
+                                callback && callback();
+                            });
+                            that.cards.push(that.chosenCard);
+                        } else {
+                            card.reveal(function(){
+                                card.alpha = 0.8;
+                            });
+                        }
+                    }, index*300);
                 });
             });
         };
@@ -119,16 +124,8 @@ define(function(require){
         });
     };
 
-    Player.prototype.revealCard = function(chosen, choiceValue){
-        this.chosenCardValue = choiceValue;
-        this.cards.forEach(function(card, index){
-            if (chosen == index){
-                card.alpha = 1;
-                card.reveal(callback);
-            } else {
-                card.reveal();
-            }
-        });
+    Player.prototype.getCardValue = function(){
+        return this.chosenCard.getValue();
     };
 
     Player.prototype.startHighlights = function(){

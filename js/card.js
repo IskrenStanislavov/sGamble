@@ -87,10 +87,12 @@ define(function(require){
 
     Card.prototype.click = function(data){
         this.chosenCallback(this);
+        this.disable();
     };
 
     Card.prototype.tap = function(data){
         this.chosenCallback(this);
+        this.disable();
     };
 
 
@@ -120,6 +122,10 @@ define(function(require){
             TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:1,y:1}),
             TweenMax.to([this.back,this.face], 0.2, {"rotation":0}),
             ]);
+    };
+
+    Card.prototype.dealTo = function(position, callback){
+        TweenMax.to(this, 0.25, {x:position.x,y:position.y, onComplete:callback}, 0.3);
     };
 
     return Card;

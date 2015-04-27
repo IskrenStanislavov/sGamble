@@ -32,8 +32,7 @@ define(function(require){
     };
 
     Dealer.prototype.dealCard = function(callback){
-        this.card = this.addChild(this.deck.pickRandom());
-        this.slideToPlace(callback);
+        this.card = this.addChild(this.deck.dealDealerCard(callback));
     };
 
     Dealer.prototype.slideToPlace = function(callback){
@@ -49,7 +48,7 @@ define(function(require){
     };
 
     Dealer.prototype.getCardValue = function(){
-        this.card.getValue();
+        return this.card.getValue();
     };
 
     return Dealer;

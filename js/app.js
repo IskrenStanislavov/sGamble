@@ -4,7 +4,7 @@ define(function(require){
     var Deck        = require("deck");
     var Player      = require("player");
     var Dealer      = require("dealer");
-    var Balanace    = require("balance");
+    var Account     = require("account");
     var config      = require("config");
     var Question    = require("questionHolder");
     var Messages    = require("messages");
@@ -16,7 +16,7 @@ define(function(require){
         BET_CHOICE      :3,
         CARD_PICKING    :4,
         CALC_RESULT     :5,
-        CARD_COLLECTION :6,
+        COLLECT_CARDS   :6,
     };
 
     var App = function(){
@@ -30,9 +30,9 @@ define(function(require){
         this.dealer = this.addChild(new Dealer(this.deck));
         this.player = this.addChild(new Player(this.deck));
 
-        this.balance = this.addChild(new Balanace(1000, 10));
-        this.balance.x = 120;
-        this.balance.y = 715;
+        this.account = this.addChild(new Account({balance:1000, bet:10}));
+        this.account.x = 120;
+        this.account.y = 715;
     };
 
     App.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -74,7 +74,7 @@ define(function(require){
                 that.player.enableButtons(function(mult){
                     that.messages.setText("");
                     that.player.disableButtons();
-                    that.balance.placeBet(mult);
+                    that.account.placeBet(mult);
                     that.dealer.reveal(function(){
                         that.setState(STATES.CARD_PICKING);
                     });
@@ -85,36 +85,29 @@ define(function(require){
                 that.messages.setText("PICK A GREATER CARD TO WIN!");
                 that.player.revealOnPick(function(){
                     that.messages.setText("");
+                }, function(){
                     that.setState(STATES.CALC_RESULT);
                 });
             break;
             case STATES.CALC_RESULT:
-                if (that.player.chosenCard.getValue() === that.dealer.getCardValue()){
+                if (that.player.getCardValue() === that.dealer.getCardValue()){
                     that.messages.setText("IT'S A TIE, TRY AGAIN!");
-                } else if (that.player.chosenCard.getValue() === that.dealer.getCardValue()){
+                } else if (that.player.getCardValue() > that.dealer.getCardValue()){
                     that.messages.setText("CONGRATULATIONS, YOU WON!");
+                    that.account.updateWin();
                 } else {
                     that.messages.setText("YOU LOST, BETTER LUCK NEXT TIME!");
                 }
                 setTimeout(function(){
-                    that.setState(STATES.CARD_COLLECTION);
+                    that.setState(STATES.COLLECT_CARDS);
                 }, 1500);
             break;
-            case STATES.CARD_COLLECTION:
+            case STATES.COLLECT_CARDS:
                 that.dealer.collectCard();
                 that.player.collectCards(function(){
-
+                    console.log("end of round\n");
+                    that.setState(STATES.DEAL);
                 });
-            // Player.prototype._dealCards = function(callback){
-            //     var that = this;
-            //     this.collectCards(function(){
-            //         that.cards.forEach(function(card){
-            //             that.removeChild(card);
-            //         });
-            //         that.dealCards(callback);
-            //     });
-
-            // };
             break;
             default:
             throw "missing state:" + Object.keys(STATES)[state];
