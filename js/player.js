@@ -106,13 +106,13 @@ define(function(require){
                     setTimeout(function(){
                         if (index === that.cards.length-1){
                             card.reveal(function(){
-                                card.alpha = 0.8;
+                                card.alpha = 0.7;
                                 callback && callback();
                             });
                             that.cards.push(that.chosenCard);
                         } else {
                             card.reveal(function(){
-                                card.alpha = 0.8;
+                                card.alpha = 0.7;
                             });
                         }
                     }, index*300);
@@ -129,12 +129,7 @@ define(function(require){
     };
 
     Player.prototype.startHighlights = function(){
-        this.tweens = TweenMax.fromTo(this.cards,0.1,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(2);
-    };
-
-    Player.prototype.stopHighlights = function(){
-        this.tweens.time(0).kill();
-        this.tweens = undefined;
+        this.tweens = TweenMax.fromTo(this.cards,0.1,{alpha:1.0},{alpha:0.7}).yoyo(true).repeat(7);
     };
 
     return Player;

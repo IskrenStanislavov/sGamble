@@ -105,7 +105,7 @@ define(function(require){
                 that.dealer.collectCard();
                 that.player.collectCards(function(){
                     that.deck.resetDeck();
-                    console.log("end of round\n");
+                    console.log("end of round");
                     that.setState(STATES.DEAL);
                 });
             break;

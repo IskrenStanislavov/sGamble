@@ -56,6 +56,7 @@ define(function(require){
     Card.prototype.mousedown = Card.prototype.touchstart = function(data){
         this.isDown = true;
         this.scale = new PIXI.Point(1.1,1.1);
+        this.alpha = 1;
     };
 
     Card.prototype.mouseup = Card.prototype.touchend = Card.prototype.mouseupoutside = Card.prototype.touchendoutside = function(data){
@@ -88,39 +89,41 @@ define(function(require){
     Card.prototype.click = function(data){
         this.chosenCallback(this);
         this.disable();
+        this.alpha = 1;
     };
 
     Card.prototype.tap = function(data){
         this.chosenCallback(this);
         this.disable();
+        this.alpha = 1;
     };
 
 
     Card.prototype.reveal = function(callback){
         var flip = new TimelineMax({"onComplete":callback});
         flip.add([
-            TweenMax.to([this.back,this.face], 0.2, {"rotation":-Math.PI/9}),
-            TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:0,y:1}),
+            TweenMax.to([this.back,this.face], 0.1, {"rotation":-Math.PI/9}),
+            TweenMax.to([this.back.scale,this.face.scale], 0.1, {x:0,y:1}),
             ]);
-        flip.set(this.back, {alpha:0, "rotation":-Math.PI/9});
-        flip.set(this.face, {alpha:1, "rotation":-Math.PI/9});
+        flip.set(this.back, {alpha:0});
+        flip.set(this.face, {alpha:1});
         flip.add([
-            TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:1,y:1}),
-            TweenMax.to([this.back,this.face], 0.2, {"rotation":0}),
+            TweenMax.to([this.back.scale,this.face.scale], 0.1, {x:1,y:1}),
+            TweenMax.to([this.back,this.face], 0.1, {"rotation":0}),
             ]);
     };
 
     Card.prototype.hide = function(callback){
         var flip = new TimelineMax({"onComplete":callback});
         flip.add([
-            TweenMax.to([this.back,this.face], 0.2, {"rotation":-Math.PI/9}),
-            TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:0,y:1}),
+            TweenMax.to([this.back,this.face], 0.1, {"rotation":-Math.PI/18}),
+            TweenMax.to([this.back.scale,this.face.scale], 0.1, {x:0,y:1}),
             ]);
-        flip.set(this.back, {alpha:1, "rotation":-Math.PI/9});
-        flip.set(this.face, {alpha:0, "rotation":-Math.PI/9});
+        flip.set(this.back, {alpha:1});
+        flip.set(this.face, {alpha:0});
         flip.add([
-            TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:1,y:1}),
-            TweenMax.to([this.back,this.face], 0.2, {"rotation":0}),
+            TweenMax.to([this.back.scale,this.face.scale], 0.1, {x:1,y:1}),
+            TweenMax.to([this.back,this.face], 0.1, {"rotation":0}),
             ]);
     };
 
