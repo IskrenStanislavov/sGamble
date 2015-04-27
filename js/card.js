@@ -9,6 +9,7 @@ define(function(require){
         this.face.anchor = new PIXI.Point(0.5, 0.5);
         this.face.alpha = 0;
         this.face.scale.x = -1;
+        this.face.scale.y = -1;
         this.face.x = this.face.texture.width/2;
         this.face.y = this.face.texture.height/2;
 
@@ -26,6 +27,17 @@ define(function(require){
     Card.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
     Card.prototype.getValue = function(){
         return this.cardData.value;
+    };
+
+    Card.prototype.collect = function(callback){
+        this.hide(function(){
+            var collectMotionData = Object.create(config.deck.pilePosition);
+            collectMotionData.x += 1;
+            collectMotionData.y += 1;
+            collectMotionData.onComplete = callback;
+
+            TweenLite.to(this, 0.5, collectMotionData, 0.3);
+        }.bind(this));
     };
 
     Card.prototype.enable = function(callback){
@@ -90,6 +102,20 @@ define(function(require){
             ]);
         flip.set(this.back, {alpha:0, "rotation":-Math.PI/9});
         flip.set(this.face, {alpha:1, "rotation":-Math.PI/9});
+        flip.add([
+            TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:1,y:1}),
+            TweenMax.to([this.back,this.face], 0.2, {"rotation":0}),
+            ]);
+    };
+
+    Card.prototype.hide = function(callback){
+        var flip = new TimelineMax({"onComplete":callback});
+        flip.add([
+            TweenMax.to([this.back,this.face], 0.2, {"rotation":-Math.PI/9}),
+            TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:0,y:1}),
+            ]);
+        flip.set(this.back, {alpha:1, "rotation":-Math.PI/9});
+        flip.set(this.face, {alpha:0, "rotation":-Math.PI/9});
         flip.add([
             TweenMax.to([this.back.scale,this.face.scale], 0.2, {x:1,y:1}),
             TweenMax.to([this.back,this.face], 0.2, {"rotation":0}),

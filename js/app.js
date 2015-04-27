@@ -4,6 +4,7 @@ define(function(require){
     var Deck        = require("deck");
     var Player      = require("player");
     var Dealer      = require("dealer");
+    var Balanace    = require("balance");
     var config      = require("config");
     var Question    = require("questionHolder");
     var Messages    = require("messages");
@@ -13,7 +14,9 @@ define(function(require){
         PREPARE_TABLE   :1,
         DEAL            :2,
         BET_CHOICE      :3,
-        AWAIT_FOR_CHOICE:4,
+        CARD_PICKING    :4,
+        CALC_RESULT     :5,
+        CARD_COLLECTION :6,
     };
 
     var App = function(){
@@ -27,6 +30,9 @@ define(function(require){
         this.dealer = this.addChild(new Dealer(this.deck));
         this.player = this.addChild(new Player(this.deck));
 
+        this.balance = this.addChild(new Balanace(1000, 10));
+        this.balance.x = 120;
+        this.balance.y = 715;
     };
 
     App.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -68,21 +74,37 @@ define(function(require){
                 that.player.enableButtons(function(mult){
                     that.messages.setText("");
                     that.player.disableButtons();
-                    that.player.setBet(mult);
+                    that.balance.placeBet(mult);
                     that.dealer.reveal(function(){
-                        that.setState(STATES.AWAIT_FOR_CHOICE);
+                        that.setState(STATES.CARD_PICKING);
                     });
                 });
             break;
-            case STATES.AWAIT_FOR_CHOICE:
+            case STATES.CARD_PICKING:
                 that.player.startHighlights();
                 that.messages.setText("PICK A GREATER CARD TO WIN!");
-                that.player.allowPick(function(choice){
+                that.player.revealOnPick(function(){
                     that.messages.setText("");
-                    that.player.revealCard(choice);
+                    that.setState(STATES.CALC_RESULT);
                 });
             break;
-            default:
+            case STATES.CALC_RESULT:
+                if (that.player.chosenCard.getValue() === that.dealer.getCardValue()){
+                    that.messages.setText("IT'S A TIE, TRY AGAIN!");
+                } else if (that.player.chosenCard.getValue() === that.dealer.getCardValue()){
+                    that.messages.setText("CONGRATULATIONS, YOU WON!");
+                } else {
+                    that.messages.setText("YOU LOST, BETTER LUCK NEXT TIME!");
+                }
+                setTimeout(function(){
+                    that.setState(STATES.CARD_COLLECTION);
+                }, 1500);
+            break;
+            case STATES.CARD_COLLECTION:
+                that.dealer.collectCard();
+                that.player.collectCards(function(){
+
+                });
             // Player.prototype._dealCards = function(callback){
             //     var that = this;
             //     this.collectCards(function(){
@@ -93,7 +115,9 @@ define(function(require){
             //     });
 
             // };
-            throw "missing state:"+Object.keys(STATES)[state];
+            break;
+            default:
+            throw "missing state:" + Object.keys(STATES)[state];
         }
     };
 

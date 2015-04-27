@@ -20,7 +20,7 @@ define(function(){
         }
         throw "wtf";
     });
-    console.log(cardIds);
+
     return {
         "deck":{
             // "suits": ["пика", "купа", "каро", "спатия"],

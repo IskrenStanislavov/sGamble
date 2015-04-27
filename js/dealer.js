@@ -40,8 +40,8 @@ define(function(require){
         TweenLite.fromTo(this.card, 0.5, config.deck.pilePosition, {x:85, y:240, onComplete:callback},0.3);
     };
 
-    Dealer.prototype.slideBack = function(){
-        TweenLite.to(this.card, 0.5, config.deck.pilePosition);
+    Dealer.prototype.collectCard = function(callback){
+        this.card.collect();
     };
 
     Dealer.prototype.reveal = function(callback){

@@ -62,11 +62,19 @@ define(function(require){
     };
 
     Player.prototype.collectCards = function(callback){
-        if (this.cards){
-            new TimelineMax({onComplete:callback}).staggerTo(this.cards, 0.25, Object.create(this.collectMotionData), 0.3);
-        } else {
-            callback && callback();
-        }
+        var that = this;
+        this.cards.forEach(function(card, index){
+            if (index === that.cards.length-1){
+                card.collect(function(){
+                    that.removeChild(card);
+                    callback && callback();
+                });
+            } else {
+                card.collect(function(){
+                    that.removeChild(card);
+                });
+            }
+        });
     };
 
     Player.prototype.dealCards = function(callback){
@@ -81,40 +89,46 @@ define(function(require){
         new TimelineMax({onComplete:callback}).staggerFrom(this.cards, 0.25, Object.create(this.collectMotionData), 0.3);
     };
 
-    Player.prototype.allowPick = function(callback){
+    Player.prototype.revealOnPick = function(callback){
         var that = this;
         function chooseWrapper(cardChosen){
             var choiceIndex;
-            that.cards.forEach(function(card, index){
-                card.disable(chooseWrapper);
-                if (card === cardChosen){
-                    choiceIndex = index;
-                }
-                // card.events.chosen.remove(chooseWrapper);
+            cardChosen.alpha = 1;
+            that.chosenCard = cardChosen;
+            cardChosen.reveal(function(){
+                that.cards.forEach(function(card, index){
+                    card.disable(chooseWrapper);
+                    if (card === cardChosen){
+                        return;
+                    }
+                    if (index === that.cards.length-1){
+                        card.reveal(function(){
+                            card.alpha = 0.8;
+                            callback && callback();
+                        });
+                    } else {
+                        card.reveal(function(){
+                            card.alpha = 0.8;
+                        });
+                    }
+                });
             });
-            callback && callback(choiceIndex, cardChosen.value);
         };
-        this.cards.forEach(function(card, cardIndex){
-            // card.events.chosen.addOnce(chooseWrapper);
+        this.cards.forEach(function(card){
             card.enable(chooseWrapper);
         });
     };
 
-    Player.prototype.slideBack = function(){
-        TweenLite.to(this.cards, 0.5, config.deck.pilePosition);
-    };
-
-    Player.prototype.revealCard = function(chosen){
+    Player.prototype.revealCard = function(chosen, choiceValue){
+        this.chosenCardValue = choiceValue;
         this.cards.forEach(function(card, index){
             if (chosen == index){
-                console.log(card);
+                card.alpha = 1;
+                card.reveal(callback);
+            } else {
+                card.reveal();
             }
-            card.reveal();
         });
-    };
-
-    Player.prototype.setBet = function(multiplier){
-        this.multiplier = multiplier;
     };
 
     Player.prototype.startHighlights = function(){
