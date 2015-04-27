@@ -31,8 +31,6 @@ define(function(require){
         this.player = this.addChild(new Player(this.deck));
 
         this.account = this.addChild(new Account({balance:1000, bet:10}));
-        this.account.x = 120;
-        this.account.y = 715;
     };
 
     App.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
@@ -92,6 +90,7 @@ define(function(require){
             case STATES.CALC_RESULT:
                 if (that.player.getCardValue() === that.dealer.getCardValue()){
                     that.messages.setText("IT'S A TIE, TRY AGAIN!");
+                    that.account.updateTie();
                 } else if (that.player.getCardValue() > that.dealer.getCardValue()){
                     that.messages.setText("CONGRATULATIONS, YOU WON!");
                     that.account.updateWin();
@@ -105,6 +104,7 @@ define(function(require){
             case STATES.COLLECT_CARDS:
                 that.dealer.collectCard();
                 that.player.collectCards(function(){
+                    that.deck.resetDeck();
                     console.log("end of round\n");
                     that.setState(STATES.DEAL);
                 });
